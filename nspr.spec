@@ -1,11 +1,11 @@
 Name:        nspr
-Version:     4.10.10
+Version:     4.12
 Release:     10
 License:     MPL-2.0
 Summary:     Netscape Portable Runtime Library
 Group:       libs
 URL:         http://www.mozilla.org/projects/nspr/
-Source0:     https://ftp.mozilla.org/pub/nspr/releases/v4.10.10/src/nspr-4.10.10.tar.gz
+Source0:     https://ftp.mozilla.org/pub/nspr/releases/v4.12/src/nspr-4.12.tar.gz
 
 %description
 Netscape Portable Runtime library is a platform-neutral API for system level
