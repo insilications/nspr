@@ -1,11 +1,11 @@
 Name:        nspr
-Version:     4.16
+Version:     4.17
 Release:     16
 License:     MPL-2.0
 Summary:     Netscape Portable Runtime Library
 Group:       libs
 URL:         http://www.mozilla.org/projects/nspr/
-Source0:     https://ftp.mozilla.org/pub/nspr/releases/v4.16/src/nspr-4.16.tar.gz
+Source0:     https://ftp.mozilla.org/pub/nspr/releases/v4.17/src/nspr-4.17.tar.gz
 
 
 BuildRequires : gcc-dev32
