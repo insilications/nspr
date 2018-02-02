@@ -1,6 +1,6 @@
 Name:        nspr
 Version:     4.18
-Release:     19
+Release:     20
 License:     MPL-2.0
 Summary:     Netscape Portable Runtime Library
 Group:       libs
