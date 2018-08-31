@@ -1,11 +1,11 @@
 Name:        nspr
-Version:     4.19
+Version:     4.20
 Release:     21
 License:     MPL-2.0
 Summary:     Netscape Portable Runtime Library
 Group:       libs
 URL:         http://www.mozilla.org/projects/nspr/
-Source0:     https://ftp.mozilla.org/pub/nspr/releases/v4.19/src/nspr-4.19.tar.gz
+Source0:     https://ftp.mozilla.org/pub/nspr/releases/v4.20/src/nspr-4.20.tar.gz
 
 
 BuildRequires : gcc-dev32
