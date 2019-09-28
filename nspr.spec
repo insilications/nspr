@@ -1,6 +1,6 @@
 Name:        nspr
 Version:     4.22
-Release:     24
+Release:     25
 License:     MPL-2.0
 Summary:     Netscape Portable Runtime Library
 Group:       libs
@@ -68,9 +68,9 @@ CC=gcc
 %make_build
 
 pushd ../build32
-export CFLAGS="$CFLAGS -m32"
-export LDFLAGS="$LDFLAGS -m32"
-export CXXFLAGS="$CXXFLAGS -m32"
+export CFLAGS="$CFLAGS -m32 -mstackrealign"
+export LDFLAGS="$LDFLAGS -m32 -mstackrealign"
+export CXXFLAGS="$CXXFLAGS -m32 -mstackrealign"
 %configure --disable-debug \
  --enable-optimize --enable-32bit \
  --disable-64bit --target=i686-generic-linux-gnu --libdir=/usr/lib32
