@@ -8,6 +8,7 @@ URL:         http://www.mozilla.org/projects/nspr/
 Source0:     https://ftp.mozilla.org/pub/nspr/releases/v4.25/src/nspr-4.25.tar.gz
 
 
+Requires: nspr-license = %{version}-%{release}
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
@@ -43,11 +44,20 @@ header files and related items necessary for software development.
 Summary:      Netscape Portable Runtime Library - Development files
 Group:        devel/libraries
 Requires:     perl
+Requires:     nspr-license = %{version}-%{release}
 Requires:     nspr = %{version}-%{release}
 
 %description lib32
 Netscape Portable Runtime Library. This package contains symbolic links,
 header files and related items necessary for software development.
+
+%package license
+Summary: license components for the nspr package.
+Group: Default
+
+%description license
+license components for the nspr package.
+
 
 %prep
 %setup -q -n nspr-%{version}/nspr
@@ -80,6 +90,7 @@ popd
 
 %install
 
+install -Dm644 LICENSE %{buildroot}/usr/share/package-licenses/nspr/LICENSE
 pushd ../build32
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -92,7 +103,6 @@ popd
 %make_install
 
 %files
-%doc LICENSE
 %{_libdir}/libnspr4.so
 %{_libdir}/libplc4.so
 %{_libdir}/libplds4.so
@@ -114,3 +124,7 @@ popd
 /usr/lib32/libnspr4.so
 /usr/lib32/libplc4.so
 /usr/lib32/libplds4.so
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/nspr/LICENSE
