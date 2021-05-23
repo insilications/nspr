@@ -1,4 +1,0 @@
---disable-debug
---enable-optimize
---enable-64bit
---target=x86_64-generic-linux-gnu
