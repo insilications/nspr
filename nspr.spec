@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : nspr
-Version  : 4.30
-Release  : 301
-URL      : file:///aot/build/clearlinux/packages/nspr/nspr-v4.30.tar.gz
-Source0  : file:///aot/build/clearlinux/packages/nspr/nspr-v4.30.tar.gz
+Version  : 4.31
+Release  : 303
+URL      : file:///aot/build/clearlinux/packages/nspr/nspr-v4.31.tar.gz
+Source0  : file:///aot/build/clearlinux/packages/nspr/nspr-v4.31.tar.gz
 Summary  : Netscape Portable Runtime
 Group    : Development/Tools
 License  : MPL-2.0
@@ -145,7 +145,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1621763990
+export SOURCE_DATE_EPOCH=1622247795
 unset LD_AS_NEEDED
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
@@ -190,6 +190,8 @@ export CCACHE_BASEDIR=/builddir/build/BUILD
 #export CCACHE_DEBUG=true
 #export CCACHE_NODIRECT=true
 ## altflags_pgo end
+if [ ! -f statuspgo ]; then
+echo PGO Phase 1
 export CFLAGS="${CFLAGS_GENERATE}"
 export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
@@ -197,7 +199,9 @@ export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
 autoreconf -v --install --force || :
 ./configure --program-prefix=%{?_program_prefix} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_bindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} --disable-debug --enable-optimize --enable-64bit --target=x86_64-generic-linux-gnu --with-arch=native
+## make_macro content
 make -j16 all V=1 VERBOSE=1
+## make_macro end
 ## ccache stats
 ccache -s
 ## ccache stats
@@ -210,6 +214,10 @@ export LD_LIBRARY_PATH="../../dist/lib:$LD_LIBRARY_PATH"
 ./runtests.sh "../../dist" || :
 popd
 make clean
+echo USED > statuspgo
+fi
+if [ -f statuspgo ]; then
+echo PGO Phase 2
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
@@ -217,10 +225,13 @@ export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
 autoreconf -v --install --force || :
 ./configure --program-prefix=%{?_program_prefix} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_bindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} --disable-debug --enable-optimize --enable-64bit --target=x86_64-generic-linux-gnu --with-arch=native
+## make_macro content
 make -j16 all V=1 VERBOSE=1
+## make_macro end
 ## ccache stats
 ccache -s
 ## ccache stats
+fi
 
 pushd ../build32/
 export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
@@ -236,24 +247,14 @@ export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %configure  --disable-debug --enable-optimize --enable-32bit --disable-64bit --target=i686-generic-linux-gnu --libdir=/usr/lib32 --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
-make  %{?_smp_mflags}  all V=1 VERBOSE=1
+make  %{?_smp_mflags}  all V=1 VERBOSE=1  V=1 VERBOSE=1
 ## ccache stats
 ccache -s
 ## ccache stats
 popd
 
-%check
-export LANG=C.UTF-8
-unset http_proxy
-unset https_proxy
-unset no_proxy
-export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
-make check -j1 V=1 VERBOSE=1 || : 
-make test -j1 V=1 VERBOSE=1 || : 
-make tests -j1 V=1 VERBOSE=1 || :
-
 %install
-export SOURCE_DATE_EPOCH=1621763990
+export SOURCE_DATE_EPOCH=1622247795
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -265,6 +266,10 @@ then
 fi
 popd
 %make_install
+## install_append content
+install -dm 0755 %{buildroot}/usr/lib64/haswell/ || :
+cp --archive %{buildroot}/usr/lib64/lib* %{buildroot}/usr/lib64/haswell/ || :
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -352,6 +357,8 @@ popd
 /usr/include/prtypes.h
 /usr/include/prvrsion.h
 /usr/include/prwin16.h
+/usr/lib64/haswell/libnspr4.so
+/usr/lib64/haswell/libplds4.so
 /usr/lib64/libnspr4.so
 /usr/lib64/libplc4.so
 /usr/lib64/libplds4.so
@@ -368,6 +375,9 @@ popd
 
 %files staticdev
 %defattr(-,root,root,-)
+/usr/lib64/haswell/libnspr4.a
+/usr/lib64/haswell/libplc4.a
+/usr/lib64/haswell/libplds4.a
 /usr/lib64/libnspr4.a
 /usr/lib64/libplc4.a
 /usr/lib64/libplds4.a

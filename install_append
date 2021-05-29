@@ -1,0 +1,2 @@
+install -dm 0755 %{buildroot}/usr/lib64/haswell/ || :
+cp --archive %{buildroot}/usr/lib64/lib* %{buildroot}/usr/lib64/haswell/ || :
