@@ -1,5 +1,5 @@
 PKG_NAME := nspr
-URL = https://github.com/insilications/nspr-clr.git
+URL = https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/nspr-4.32.tar.gz
 ARCHIVES = 
 ARCHIVES_GIT = 
 

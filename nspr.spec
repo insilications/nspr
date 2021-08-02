@@ -4,14 +4,13 @@
 #
 %define keepstatic 1
 Name     : nspr
-Version  : 4.31
-Release  : 303
-URL      : file:///aot/build/clearlinux/packages/nspr/nspr-v4.31.tar.gz
-Source0  : file:///aot/build/clearlinux/packages/nspr/nspr-v4.31.tar.gz
+Version  : 4.32
+Release  : 304
+URL      : https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/nspr-4.32.tar.gz
+Source0  : https://ftp.mozilla.org/pub/nspr/releases/v4.32/src/nspr-4.32.tar.gz
 Summary  : Netscape Portable Runtime
 Group    : Development/Tools
 License  : MPL-2.0
-Requires: nspr-bin = %{version}-%{release}
 BuildRequires : binutils-dev
 BuildRequires : bison
 BuildRequires : buildreq-cmake
@@ -52,7 +51,6 @@ BuildRequires : libgcc1
 BuildRequires : libstdc++
 BuildRequires : libxml2-dev
 BuildRequires : libxml2-staticdev
-BuildRequires : perl
 BuildRequires : pkg-config
 BuildRequires : pkgconfig(32libcurl)
 BuildRequires : pkgconfig(libcurl)
@@ -85,58 +83,11 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-%package bin
-Summary: bin components for the nspr package.
-Group: Binaries
-
-%description bin
-bin components for the nspr package.
-
-
-%package dev
-Summary: dev components for the nspr package.
-Group: Development
-Requires: nspr-bin = %{version}-%{release}
-Provides: nspr-devel = %{version}-%{release}
-Requires: nspr = %{version}-%{release}
-
-%description dev
-dev components for the nspr package.
-
-
-%package dev32
-Summary: dev32 components for the nspr package.
-Group: Default
-Requires: nspr-bin = %{version}-%{release}
-Requires: nspr-dev = %{version}-%{release}
-
-%description dev32
-dev32 components for the nspr package.
-
-
-%package staticdev
-Summary: staticdev components for the nspr package.
-Group: Default
-Requires: nspr-dev = %{version}-%{release}
-
-%description staticdev
-staticdev components for the nspr package.
-
-
-%package staticdev32
-Summary: staticdev32 components for the nspr package.
-Group: Default
-Requires: nspr-dev32 = %{version}-%{release}
-
-%description staticdev32
-staticdev32 components for the nspr package.
-
-
 %prep
-%setup -q -n nspr
-cd %{_builddir}/nspr
-pushd ..
-cp -a nspr build32
+%setup -q -n nspr-4.32/nspr
+cd %{_builddir}/nspr-4.32
+pushd %{_builddir}
+cp -a %{_builddir}/nspr-4.32 build32
 popd
 
 %build
@@ -145,26 +96,23 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1622247795
+export SOURCE_DATE_EPOCH=1627941938
 unset LD_AS_NEEDED
 export GCC_IGNORE_WERROR=1
-## altflags_pgo content
-## pgo generate
-export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage --coverage -fprofile-partial-training"
-export CFLAGS_GENERATE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -Wl,--build-id=sha1 -fdevirtualize-at-ltrans -Wl,-z,now -Wl,-z,relro -Wl,-sort-common -fasynchronous-unwind-tables -lgcov --coverage $PGO_GEN"
-export FCFLAGS_GENERATE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -Wl,--build-id=sha1 -fdevirtualize-at-ltrans -Wl,-z,now -Wl,-z,relro -Wl,-sort-common -fasynchronous-unwind-tables -lgcov --coverage $PGO_GEN"
-export FFLAGS_GENERATE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -Wl,--build-id=sha1 -fdevirtualize-at-ltrans -Wl,-z,now -Wl,-z,relro -Wl,-sort-common -fasynchronous-unwind-tables -lgcov --coverage $PGO_GEN"
-export CXXFLAGS_GENERATE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe -ffat-lto-objects -flto=16 -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -Wl,--build-id=sha1 -fdevirtualize-at-ltrans -Wl,-z,now -Wl,-z,relro -Wl,-sort-common -fasynchronous-unwind-tables -lgcov --coverage $PGO_GEN"
-export LDFLAGS_GENERATE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -falign-functions=32 -flimit-function-alignment -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe -ffat-lto-objects -flto=16 -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -lpthread -Wl,--build-id=sha1 -fdevirtualize-at-ltrans -Wl,-z,now -Wl,-z,relro -Wl,-sort-common -fasynchronous-unwind-tables -lgcov --coverage $PGO_GEN"
-## pgo use
-## -ffat-lto-objects -fno-PIE -fno-PIE -m64 -no-pie -fPIC -Wl,-z,max-page-size=0x1000 -fvisibility=hidden -flto-partition=none
-## gcc: -feliminate-unused-debug-types -fipa-pta -flto=16 -Wno-error -Wp,-D_REENTRANT -fno-common -funroll-loops
-export PGO_USE="-fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-correction -fprofile-partial-training"
-export CFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
-export FCFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
-export FFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
-export CXXFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc $PGO_USE"
-export LDFLAGS_USE="-g -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -Wl,-z,max-page-size=0x1000 -fomit-frame-pointer -pthread -static-libstdc++ -static-libgcc -lpthread $PGO_USE"
+## altflags1 content
+export CFLAGS="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,relro,-z,now -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
+## -fno-tree-vectorize: disable -ftree-vectorize thus disable -ftree-loop-vectorize and -ftree-slp-vectorize
+## -Ofast -ffast-math
+## -funroll-loops maybe dangerous
+## -Wl,-z,max-page-size=0x1000
+## -pthread -lpthread
+export CXXFLAGS="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,relro,-z,now -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
+#
+export FCFLAGS="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,relro,-z,now -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
+export FFLAGS="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,relro,-z,now -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
+export CFFLAGS="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,relro,-z,now -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -fexceptions -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
+#
+export LDFLAGS="-g3 -ggdb -O3 --param=lto-max-streaming-parallelism=16 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,relro,-z,now -mprefer-vector-width=256 -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -floop-block -fno-math-errno -fno-semantic-interposition -Wl,-Bsymbolic-functions -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-slp-vectorize -ftree-vectorize -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC -fomit-frame-pointer -static-libstdc++ -static-libgcc -Wl,--build-id=sha1"
 #
 export AR=/usr/bin/gcc-ar
 export RANLIB=/usr/bin/gcc-ranlib
@@ -178,7 +126,6 @@ export MAKEFLAGS=%{?_smp_mflags}
 #%global _disable_maintainer_mode %{nil}
 #
 export CCACHE_DISABLE=true
-export PATH="/usr/lib64/ccache/bin:$PATH"
 export CCACHE_NOHASHDIR=true
 export CCACHE_CPP2=true
 export CCACHE_SLOPPINESS=pch_defines,time_macros,locale,file_stat_matches,file_stat_matches_ctime,include_file_ctime,include_file_mtime,modules,system_headers,clang_index_store,file_macro
@@ -189,74 +136,72 @@ export CCACHE_BASEDIR=/builddir/build/BUILD
 #export CCACHE_LOGFILE=/var/tmp/ccache/cache.debug
 #export CCACHE_DEBUG=true
 #export CCACHE_NODIRECT=true
-## altflags_pgo end
-if [ ! -f statuspgo ]; then
-echo PGO Phase 1
-export CFLAGS="${CFLAGS_GENERATE}"
-export CXXFLAGS="${CXXFLAGS_GENERATE}"
-export FFLAGS="${FFLAGS_GENERATE}"
-export FCFLAGS="${FCFLAGS_GENERATE}"
-export LDFLAGS="${LDFLAGS_GENERATE}"
+#
+export LD_LIBRARY_PATH="/usr/nvidia/lib64:/usr/nvidia/lib64/vdpau:/usr/nvidia/lib64/xorg/modules/drivers:/usr/nvidia/lib64/xorg/modules/extensions:/usr/local/cuda/lib64:/usr/lib64/haswell:/usr/lib64/dri:/usr/lib64/chromium:/usr/lib64:/usr/lib64/pulseaudio:/usr/lib64/alsa-lib:/usr/lib64/gstreamer-1.0:/usr/lib64/pipewire-0.3:/usr/lib64/spa-0.2:/usr/lib:/aot/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/aot/intel/oneapi/compiler/latest/linux/lib:/aot/intel/oneapi/mkl/latest/lib/intel64:/aot/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/share:/usr/lib64/wine:/usr/nvidia/lib32:/usr/nvidia/lib32/vdpau:/usr/lib32:/usr/lib32/wine"
+#
+export LIBRARY_PATH="/usr/nvidia/lib64:/usr/nvidia/lib64/vdpau:/usr/nvidia/lib64/xorg/modules/drivers:/usr/nvidia/lib64/xorg/modules/extensions:/usr/local/cuda/lib64:/usr/lib64/haswell:/usr/lib64/dri:/usr/lib64/chromium:/usr/lib64:/usr/lib64/pulseaudio:/usr/lib64/alsa-lib:/usr/lib64/gstreamer-1.0:/usr/lib64/pipewire-0.3:/usr/lib64/spa-0.2:/usr/lib:/aot/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/aot/intel/oneapi/compiler/latest/linux/lib:/aot/intel/oneapi/mkl/latest/lib/intel64:/aot/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/share:/usr/lib64/wine:/usr/nvidia/lib32:/usr/nvidia/lib32/vdpau:/usr/lib32:/usr/lib32/wine"
+#
+export PATH="/usr/lib64/ccache/bin:/usr/local/cuda/bin:/usr/nvidia/bin:/usr/bin/haswell:/usr/bin:/usr/sbin"
+#
+export CPATH="/usr/local/cuda/include"
+#
+export DISPLAY=:0
+export __GL_SYNC_TO_VBLANK=0
+export __GL_SYNC_DISPLAY_DEVICE=DFP-1
+export VDPAU_NVIDIA_SYNC_DISPLAY_DEVICE=DFP-1
+export LANG=en_US.UTF-8
+export XDG_CONFIG_DIRS=/usr/share/xdg:/etc/xdg
+export XDG_SEAT=seat0
+export XDG_SESSION_TYPE=tty
+export XDG_CURRENT_DESKTOP=KDE
+export XDG_SESSION_CLASS=user
+export XDG_VTNR=1
+export XDG_SESSION_ID=1
+export XDG_RUNTIME_DIR=/run/user/1000
+export XDG_DATA_DIRS=/usr/local/share:/usr/share
+export KDE_SESSION_VERSION=5
+export KDE_SESSION_UID=1000
+export KDE_FULL_SESSION=true
+export KDE_APPLICATIONS_AS_SCOPE=1
+export VDPAU_DRIVER=nvidia
+export LIBVA_DRIVER_NAME=vdpau
+export LIBVA_DRIVERS_PATH=/usr/lib64/dri
+export GTK_RC_FILES=/etc/gtk/gtkrc
+export FONTCONFIG_PATH=/usr/share/defaults/fonts
+## altflags1 end
+pushd nspr
 autoreconf -v --install --force || :
 ./configure --program-prefix=%{?_program_prefix} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_bindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} --disable-debug --enable-optimize --enable-64bit --target=x86_64-generic-linux-gnu --with-arch=native
 ## make_macro content
 make -j16 all V=1 VERBOSE=1
 ## make_macro end
-## ccache stats
-ccache -s
-## ccache stats
-
-pushd pr
-make -j16 V=1 VERBOSE=1 XCFLAGS="${CFLAGS} -lgcov --coverage" HOST_CXXFLAGS="${CXXFLAGS} -lgcov --coverage" HOST_LDFLAGS="${LDFLAGS} -lgcov --coverage" EXTRA_LIBS="${LDFLAGS} -lgcov --coverage"
-cd tests
-make -j16 V=1 VERBOSE=1 XCFLAGS="${CFLAGS} -lgcov --coverage" HOST_CXXFLAGS="${CXXFLAGS} -lgcov --coverage" HOST_LDFLAGS="${LDFLAGS} -lgcov --coverage" EXTRA_LIBS="${LDFLAGS} -lgcov --coverage"
-export LD_LIBRARY_PATH="../../dist/lib:$LD_LIBRARY_PATH"
-./runtests.sh "../../dist" || :
 popd
-make clean
-echo USED > statuspgo
-fi
-if [ -f statuspgo ]; then
-echo PGO Phase 2
-export CFLAGS="${CFLAGS_USE}"
-export CXXFLAGS="${CXXFLAGS_USE}"
-export FFLAGS="${FFLAGS_USE}"
-export FCFLAGS="${FCFLAGS_USE}"
-export LDFLAGS="${LDFLAGS_USE}"
-autoreconf -v --install --force || :
-./configure --program-prefix=%{?_program_prefix} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_bindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} --disable-debug --enable-optimize --enable-64bit --target=x86_64-generic-linux-gnu --with-arch=native
-## make_macro content
-make -j16 all V=1 VERBOSE=1
-## make_macro end
-## ccache stats
-ccache -s
-## ccache stats
-fi
 
-pushd ../build32/
-export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
-export CXXFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
-export LDFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+pushd ../build32/nspr
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 unset LD_LIBRARY_PATH
+unset LIBRARY_PATH
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+unset FCFLAGS
+unset FFLAGS
+unset CFFLAGS
+export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export CXXFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export LDFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
 export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %configure  --disable-debug --enable-optimize --enable-32bit --disable-64bit --target=i686-generic-linux-gnu --libdir=/usr/lib32 --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make  %{?_smp_mflags}  all V=1 VERBOSE=1  V=1 VERBOSE=1
-## ccache stats
-ccache -s
-## ccache stats
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1622247795
+export SOURCE_DATE_EPOCH=1627941938
 rm -rf %{buildroot}
-pushd ../build32/
+pushd ../build32/nspr
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
 then
@@ -265,7 +210,9 @@ then
     popd
 fi
 popd
+pushd nspr
 %make_install
+popd
 ## install_append content
 install -dm 0755 %{buildroot}/usr/lib64/haswell/ || :
 cp --archive %{buildroot}/usr/lib64/lib* %{buildroot}/usr/lib64/haswell/ || :
@@ -273,117 +220,3 @@ cp --archive %{buildroot}/usr/lib64/lib* %{buildroot}/usr/lib64/haswell/ || :
 
 %files
 %defattr(-,root,root,-)
-
-%files bin
-%defattr(-,root,root,-)
-/usr/bin/compile-et.pl
-/usr/bin/nspr-config
-/usr/bin/prerr.properties
-
-%files dev
-%defattr(-,root,root,-)
-/usr/include/md/_aix32.cfg
-/usr/include/md/_aix64.cfg
-/usr/include/md/_bsdi.cfg
-/usr/include/md/_darwin.cfg
-/usr/include/md/_freebsd.cfg
-/usr/include/md/_hpux32.cfg
-/usr/include/md/_hpux64.cfg
-/usr/include/md/_linux.cfg
-/usr/include/md/_netbsd.cfg
-/usr/include/md/_nto.cfg
-/usr/include/md/_openbsd.cfg
-/usr/include/md/_os2.cfg
-/usr/include/md/_qnx.cfg
-/usr/include/md/_riscos.cfg
-/usr/include/md/_scoos.cfg
-/usr/include/md/_solaris.cfg
-/usr/include/md/_unixware.cfg
-/usr/include/md/_unixware7.cfg
-/usr/include/md/_win95.cfg
-/usr/include/md/_winnt.cfg
-/usr/include/nspr.h
-/usr/include/obsolete/pralarm.h
-/usr/include/obsolete/probslet.h
-/usr/include/obsolete/protypes.h
-/usr/include/obsolete/prsem.h
-/usr/include/plarena.h
-/usr/include/plarenas.h
-/usr/include/plbase64.h
-/usr/include/plerror.h
-/usr/include/plgetopt.h
-/usr/include/plhash.h
-/usr/include/plstr.h
-/usr/include/pratom.h
-/usr/include/prbit.h
-/usr/include/prclist.h
-/usr/include/prcmon.h
-/usr/include/prcountr.h
-/usr/include/prcpucfg.h
-/usr/include/prcvar.h
-/usr/include/prdtoa.h
-/usr/include/prenv.h
-/usr/include/prerr.h
-/usr/include/prerror.h
-/usr/include/prinet.h
-/usr/include/prinit.h
-/usr/include/prinrval.h
-/usr/include/prio.h
-/usr/include/pripcsem.h
-/usr/include/private/pprio.h
-/usr/include/private/pprthred.h
-/usr/include/private/prpriv.h
-/usr/include/prlink.h
-/usr/include/prlock.h
-/usr/include/prlog.h
-/usr/include/prlong.h
-/usr/include/prmem.h
-/usr/include/prmon.h
-/usr/include/prmwait.h
-/usr/include/prnetdb.h
-/usr/include/prolock.h
-/usr/include/prpdce.h
-/usr/include/prprf.h
-/usr/include/prproces.h
-/usr/include/prrng.h
-/usr/include/prrwlock.h
-/usr/include/prshm.h
-/usr/include/prshma.h
-/usr/include/prsystem.h
-/usr/include/prthread.h
-/usr/include/prtime.h
-/usr/include/prtpool.h
-/usr/include/prtrace.h
-/usr/include/prtypes.h
-/usr/include/prvrsion.h
-/usr/include/prwin16.h
-/usr/lib64/haswell/libnspr4.so
-/usr/lib64/haswell/libplds4.so
-/usr/lib64/libnspr4.so
-/usr/lib64/libplc4.so
-/usr/lib64/libplds4.so
-/usr/lib64/pkgconfig/nspr.pc
-/usr/share/aclocal/*.m4
-
-%files dev32
-%defattr(-,root,root,-)
-/usr/lib32/libnspr4.so
-/usr/lib32/libplc4.so
-/usr/lib32/libplds4.so
-/usr/lib32/pkgconfig/32nspr.pc
-/usr/lib32/pkgconfig/nspr.pc
-
-%files staticdev
-%defattr(-,root,root,-)
-/usr/lib64/haswell/libnspr4.a
-/usr/lib64/haswell/libplc4.a
-/usr/lib64/haswell/libplds4.a
-/usr/lib64/libnspr4.a
-/usr/lib64/libplc4.a
-/usr/lib64/libplds4.a
-
-%files staticdev32
-%defattr(-,root,root,-)
-/usr/lib32/libnspr4.a
-/usr/lib32/libplc4.a
-/usr/lib32/libplds4.a

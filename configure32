@@ -1,1 +1,6 @@
---disable-debug --enable-optimize --enable-32bit --disable-64bit --target=i686-generic-linux-gnu --libdir=/usr/lib32
+--disable-debug
+--enable-optimize
+--enable-32bit
+--disable-64bit
+--target=i686-generic-linux-gnu
+--libdir=/usr/lib32
