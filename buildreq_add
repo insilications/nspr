@@ -37,6 +37,7 @@ libgcc1
 libstdc++
 libxml2-dev
 libxml2-staticdev
+perl
 pkg-config
 procps-ng
 python3-dev
