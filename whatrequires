@@ -45,6 +45,7 @@ R-XML-lib
 R-adegenet
 R-adegraphics
 R-adephylo
+R-adespatial
 R-arm
 R-betareg
 R-bipartite
@@ -59,7 +60,6 @@ R-leaflet
 R-lwgeom
 R-mi
 R-mstate
-R-mvoutlier
 R-partykit
 R-pdftools
 R-pdftools-lib
@@ -123,6 +123,8 @@ ceph-dev
 ceph-lib
 ceph-python
 ceph-python3
+compat-poppler-soname111
+compat-poppler-soname111-lib
 compat-tracker-soname2.0
 compat-tracker-soname2.0-bin
 compat-tracker-soname2.0-dev
